@@ -27,159 +27,162 @@ import { ManageUsersPage } from './pages/ManageUsersPage';
 import { MyProgressPage } from './pages/MyProgressPage';
 import { StudentProgressPage } from './pages/StudentProgressPage';
 import { DoubtsPage } from './pages/DoubtsPage';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          {/* Public Routes with Home Layout */}
-          <Route path="/" element={
-            <LayoutHome>
-              <HomePage />
-            </LayoutHome>
-          } />
-          <Route path="/about" element={
-            <LayoutHome>
-              <AboutPage />
-            </LayoutHome>
-          } />
-          <Route path="/contact" element={
-            <LayoutHome>
-              <ContactPage />
-            </LayoutHome>
-          } />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            {/* Public Routes with Home Layout */}
+            <Route path="/" element={
+              <LayoutHome>
+                <HomePage />
+              </LayoutHome>
+            } />
+            <Route path="/about" element={
+              <LayoutHome>
+                <AboutPage />
+              </LayoutHome>
+            } />
+            <Route path="/contact" element={
+              <LayoutHome>
+                <ContactPage />
+              </LayoutHome>
+            } />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/register" element={<RegisterForm />} />
 
-          {/* Protected Routes with Dashboard Layout - UPDATED */}
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Layout>
-                {/* This will redirect to appropriate dashboard based on role */}
-                <RoleBasedDashboard />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/admin" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Layout>
-                <AdminDashboard />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/student" element={
-            <ProtectedRoute allowedRoles={['student']}>
-              <Layout>
-                <StudentDashboard />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/progress" element={
-            <ProtectedRoute allowedRoles={['student']}>
-              <Layout>
-                <MyProgressPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/parent" element={
-            <ProtectedRoute allowedRoles={['parent']}>
-              <Layout>
-                <ParentDashboard />
-              </Layout>
-            </ProtectedRoute>
-          } />
-
-          {/* Feature Routes */}
-          <Route path="/users" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Layout>
-                <ManageUsersPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/progress" element={
-            <ProtectedRoute allowedRoles={['admin', 'parent']}>
-              <Layout>
-                <StudentProgressPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-
-          <Route path="/parent/progress" element={
-            <ProtectedRoute allowedRoles={['parent']}>
-              <Layout>
-                <StudentProgressPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-
-          <Route path="/admin/progress" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Layout>
-                <StudentProgressPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/parent/doubts" element={
-            <ProtectedRoute allowedRoles={['parent']}>
-              <Layout>
-                <DoubtsPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-
-          <Route path="/admin/doubts" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Layout>
-                <DoubtsPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/subjects" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <Layout>
-                <ManageSubjectsPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
-
-          <Route path="/settings" element={
+            {/* Protected Routes with Dashboard Layout - UPDATED */}
+            <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Layout>
-                  <SettingsPage />
+                  {/* This will redirect to appropriate dashboard based on role */}
+                  <RoleBasedDashboard />
                 </Layout>
               </ProtectedRoute>
             } />
-          
-          <Route path="/pdfs" element={
-            <ProtectedRoute allowedRoles={['student', 'admin']}>
-              <Layout>
-                <PDFLibrary />
-              </Layout>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/teaching" element={
-            <ProtectedRoute allowedRoles={['student']}>
-              <Layout>
-                <TeachingMode />
-              </Layout>
-            </ProtectedRoute>
-          } />
+            
+            <Route path="/admin" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Layout>
+                  <AdminDashboard />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/student" element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <Layout>
+                  <StudentDashboard />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/progress" element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <Layout>
+                  <MyProgressPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/parent" element={
+              <ProtectedRoute allowedRoles={['parent']}>
+                <Layout>
+                  <ParentDashboard />
+                </Layout>
+              </ProtectedRoute>
+            } />
 
-          {/* Redirect to home for unknown routes */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+            {/* Feature Routes */}
+            <Route path="/users" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Layout>
+                  <ManageUsersPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/progress" element={
+              <ProtectedRoute allowedRoles={['admin', 'parent']}>
+                <Layout>
+                  <StudentProgressPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+
+            <Route path="/parent/progress" element={
+              <ProtectedRoute allowedRoles={['parent']}>
+                <Layout>
+                  <StudentProgressPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+
+            <Route path="/admin/progress" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Layout>
+                  <StudentProgressPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/parent/doubts" element={
+              <ProtectedRoute allowedRoles={['parent']}>
+                <Layout>
+                  <DoubtsPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+
+            <Route path="/admin/doubts" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Layout>
+                  <DoubtsPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/subjects" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <Layout>
+                  <ManageSubjectsPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+
+            <Route path="/settings" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <SettingsPage />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+            
+            <Route path="/pdfs" element={
+              <ProtectedRoute allowedRoles={['student', 'admin']}>
+                <Layout>
+                  <PDFLibrary />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/teaching" element={
+              <ProtectedRoute allowedRoles={['student']}>
+                <Layout>
+                  <TeachingMode />
+                </Layout>
+              </ProtectedRoute>
+            } />
+
+            {/* Redirect to home for unknown routes */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

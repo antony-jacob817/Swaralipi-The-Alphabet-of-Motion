@@ -70,12 +70,6 @@ export function MyProgressPage() {
     fetchProgressData();
   }, [user?.id]);
 
-  const getProgressColor = (progress: number) => {
-    if (progress >= 80) return 'bg-green-600';
-    if (progress >= 50) return 'bg-blue-600';
-    return 'bg-yellow-600';
-  };
-
   const getIconComponent = (iconName: string) => {
     const icons = {
       Award: Award,
@@ -90,15 +84,13 @@ export function MyProgressPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Progress</h1>
-            <p className="text-gray-600 mt-1">Tracking your learning journey</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Progress</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Tracking your learning journey</p>
         </div>
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading your progress data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 dark:border-pink-400 mx-auto"></div>
+          <p className="text-gray-600 dark:text-gray-400 mt-4">Loading your progress data...</p>
         </div>
       </div>
     );
@@ -107,13 +99,11 @@ export function MyProgressPage() {
   if (error) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Progress</h1>
-            <p className="text-gray-600 mt-1">Tracking your learning journey</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Progress</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Tracking your learning journey</p>
         </div>
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
           Error: {error}
         </div>
       </div>
@@ -123,14 +113,12 @@ export function MyProgressPage() {
   if (!studentProgress) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Progress</h1>
-            <p className="text-gray-600 mt-1">Tracking your learning journey</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Progress</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Tracking your learning journey</p>
         </div>
         <div className="text-center py-12">
-          <p className="text-gray-600">No progress data available.</p>
+          <p className="text-gray-600 dark:text-gray-400">No progress data available.</p>
         </div>
       </div>
     );
@@ -141,15 +129,15 @@ export function MyProgressPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">My Progress</h1>
-          <p className="text-gray-600 mt-1">Tracking your learning journey, {studentProgress.name}</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Progress</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Tracking your learning journey, {studentProgress.name}</p>
         </div>
         <div className="flex items-center gap-4">
-          <Badge variant="outline" className="bg-blue-100 text-blue-800">
+          <Badge variant="outline" className="bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300 border-pink-200 dark:border-pink-800">
             <Target className="h-4 w-4 mr-1" />
             {studentProgress.streak} day streak
           </Badge>
-          <Badge variant="outline" className="bg-yellow-100 text-yellow-800">
+          <Badge variant="outline" className="bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300 border-pink-200 dark:border-pink-800">
             <Award className="h-4 w-4 mr-1" />
             {studentProgress.points} points
           </Badge>
@@ -158,57 +146,57 @@ export function MyProgressPage() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+        <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <BarChart3 className="h-6 w-6 text-blue-600" />
+              <div className="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                <BarChart3 className="h-6 w-6 text-pink-600 dark:text-pink-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Overall Progress</p>
-                <p className="text-2xl font-bold text-gray-900">{studentProgress.overallProgress}%</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Overall Progress</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{studentProgress.overallProgress}%</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Calendar className="h-6 w-6 text-green-600" />
+              <div className="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                <Calendar className="h-6 w-6 text-pink-600 dark:text-pink-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">This Week</p>
-                <p className="text-2xl font-bold text-gray-900">{studentProgress.weeklyTotal}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">This Week</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{studentProgress.weeklyTotal}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <BookOpen className="h-6 w-6 text-purple-600" />
+              <div className="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                <BookOpen className="h-6 w-6 text-pink-600 dark:text-pink-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Chapters Completed</p>
-                <p className="text-2xl font-bold text-gray-900">{studentProgress.chaptersCompleted}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Chapters Completed</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{studentProgress.chaptersCompleted}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Clock className="h-6 w-6 text-orange-600" />
+              <div className="p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg">
+                <Clock className="h-6 w-6 text-pink-600 dark:text-pink-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Avg. Daily Time</p>
-                <p className="text-2xl font-bold text-gray-900">{studentProgress.avgDailyTime}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Avg. Daily Time</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{studentProgress.avgDailyTime}</p>
               </div>
             </div>
           </CardContent>
@@ -216,30 +204,30 @@ export function MyProgressPage() {
       </div>
 
       {/* Overall Progress */}
-      <Card>
+      <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
         <CardHeader>
-          <CardTitle>Your Learning Progress</CardTitle>
-          <CardDescription>Keep up the great work!</CardDescription>
+          <CardTitle className="text-gray-900 dark:text-white">Your Learning Progress</CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-400">Keep up the great work!</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between mb-4">
-            <span className="text-2xl font-bold text-gray-900">{studentProgress.overallProgress}%</span>
-            <Badge variant="secondary" className="bg-green-100 text-green-800">
+            <span className="text-2xl font-bold text-gray-900 dark:text-white">{studentProgress.overallProgress}%</span>
+            <Badge className="bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300 border-0">
               {studentProgress.overallProgress >= 80 ? 'Excellent Progress' : 
                studentProgress.overallProgress >= 60 ? 'Good Progress' : 
                'Needs Improvement'}
             </Badge>
           </div>
-          <Progress value={studentProgress.overallProgress} className="h-3" />
+          <Progress value={studentProgress.overallProgress} className="h-3 [&>div]:bg-pink-600" />
         </CardContent>
       </Card>
 
       {/* Subject Progress */}
       {studentProgress.subjects && studentProgress.subjects.length > 0 ? (
-        <Card>
+        <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Subject Progress</CardTitle>
-            <CardDescription>Your progress across all subjects</CardDescription>
+            <CardTitle className="text-gray-900 dark:text-white">Subject Progress</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400">Your progress across all subjects</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -248,16 +236,16 @@ export function MyProgressPage() {
                 const color = colors[index % colors.length] || subject.color;
                 
                 return (
-                  <div key={index} className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                  <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md dark:hover:shadow-gray-800 transition-shadow bg-white dark:bg-black">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className={`w-4 h-4 rounded-full ${color}`}></div>
-                        <h4 className="font-semibold text-gray-900">{subject.name}</h4>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">{subject.name}</h4>
                       </div>
-                      <Badge variant="outline">{subject.progress}%</Badge>
+                      <Badge variant="outline" className="dark:text-gray-300 dark:border-gray-600">{subject.progress}%</Badge>
                     </div>
-                    <Progress value={subject.progress} className={`mb-2 ${getProgressColor(subject.progress)}`} />
-                    <div className="flex justify-between text-sm text-gray-600">
+                    <Progress value={subject.progress} className="mb-2 [&>div]:bg-pink-600" />
+                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                       <span>
                         {subject.chaptersCompleted} of {subject.totalChapters} chapters completed
                       </span>
@@ -270,34 +258,34 @@ export function MyProgressPage() {
           </CardContent>
         </Card>
       ) : (
-        <Card>
+        <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Subject Progress</CardTitle>
-            <CardDescription>No subjects added yet</CardDescription>
+            <CardTitle className="text-gray-900 dark:text-white">Subject Progress</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400">No subjects added yet</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-600">Subjects will appear here once they are added by your teacher.</p>
+            <p className="text-gray-600 dark:text-gray-400">Subjects will appear here once they are added by your teacher.</p>
           </CardContent>
         </Card>
       )}
 
       {/* Weekly Activity */}
-      <Card>
+      <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
         <CardHeader>
-          <CardTitle>Weekly Activity</CardTitle>
-          <CardDescription>Your study hours this week</CardDescription>
+          <CardTitle className="text-gray-900 dark:text-white">Weekly Activity</CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-400">Your study hours this week</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-7 gap-2">
             {studentProgress.weeklyActivity.map((day, index) => (
               <div key={index} className="text-center">
-                <div className="text-sm text-gray-600 mb-1">{day.day}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">{day.day}</div>
                 <div 
-                  className="bg-blue-100 rounded-t-lg mx-auto transition-all hover:bg-blue-200"
+                  className="bg-pink-100 dark:bg-pink-900/30 rounded-t-lg mx-auto transition-all hover:bg-pink-200 dark:hover:bg-pink-800/50"
                   style={{ height: `${day.hours * 40}px`, width: '30px' }}
                   title={`${day.hours} hours`}
                 ></div>
-                <div className="text-xs text-gray-500 mt-1">{day.hours}h</div>
+                <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">{day.hours}h</div>
               </div>
             ))}
           </div>
@@ -306,21 +294,21 @@ export function MyProgressPage() {
 
       {/* Achievements */}
       {studentProgress.achievements && studentProgress.achievements.length > 0 && (
-        <Card>
+        <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Recent Achievements</CardTitle>
-            <CardDescription>Badges you've earned recently</CardDescription>
+            <CardTitle className="text-gray-900 dark:text-white">Recent Achievements</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400">Badges you've earned recently</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {studentProgress.achievements.map((achievement, index) => (
-                <div key={index} className={`flex items-center gap-3 p-3 bg-gradient-to-r ${achievement.color} border border-gray-200 rounded-lg`}>
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                <div key={index} className={`flex items-center gap-3 p-3 bg-gradient-to-r ${achievement.color} border border-gray-200 dark:border-gray-700 rounded-lg`}>
+                  <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-700 dark:text-gray-300">
                     {getIconComponent(achievement.icon)}
                   </div>
                   <div>
-                    <h5 className="font-medium text-gray-900">{achievement.title}</h5>
-                    <p className="text-sm text-gray-600">{achievement.description}</p>
+                    <h5 className="font-medium text-gray-900 dark:text-white">{achievement.title}</h5>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{achievement.description}</p>
                   </div>
                 </div>
               ))}

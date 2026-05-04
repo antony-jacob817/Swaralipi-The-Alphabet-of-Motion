@@ -23,7 +23,6 @@ export function SettingsPage() {
   const [memberSince, setMemberSince] = useState<string>('');
 
   useEffect(() => {
-    // Fetch user details including createdAt date when component mounts
     const fetchUserDetails = async () => {
       if (user?.id) {
         try {
@@ -31,7 +30,6 @@ export function SettingsPage() {
           const userData = await response.json();
           
           if (response.ok && userData.createdAt) {
-            // Format the date to be more readable
             const joinDate = new Date(userData.createdAt);
             const formattedDate = joinDate.toLocaleDateString('en-US', {
               year: 'numeric',
@@ -42,7 +40,6 @@ export function SettingsPage() {
           }
         } catch (error) {
           console.error('Failed to fetch user details:', error);
-          // Fallback to current date if fetch fails
           setMemberSince('January 15, 2024');
         }
       }
@@ -69,13 +66,8 @@ export function SettingsPage() {
 
       const response = await fetch('http://localhost:5000/api/update-profile', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: user?.id,
-          name: name.trim()
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: user?.id, name: name.trim() }),
       });
 
       const data = await response.json();
@@ -116,14 +108,8 @@ export function SettingsPage() {
 
       const response = await fetch('http://localhost:5000/api/change-password', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user?.id,
-          currentPassword,
-          newPassword
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user?.id, currentPassword, newPassword }),
       });
 
       const data = await response.json();
@@ -148,15 +134,15 @@ export function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-1">Manage your account settings and preferences</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">Manage your account settings and preferences</p>
       </div>
 
       {message && (
-        <div className={`p-4 rounded-md fixed top-4 right-4 z-50 max-w-md ${
+        <div className={`fixed top-4 right-4 z-50 max-w-md p-4 rounded-md border ${
           messageType === 'success' 
-            ? 'bg-green-100 text-green-700 border border-green-200' 
-            : 'bg-red-100 text-red-700 border border-red-200'
+            ? 'bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300' 
+            : 'bg-red-100 dark:bg-red-900/30 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300'
         }`}>
           <div className="flex items-center">
             {messageType === 'success' ? (
@@ -173,45 +159,46 @@ export function SettingsPage() {
         </div>
       )}
 
-      <Card>
+      <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
             <User className="h-5 w-5" />
             Profile Information
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-gray-600 dark:text-gray-400">
             Update your personal information
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleProfileUpdate} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">Full Name</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your full name"
                 required
+                className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white"
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email Address</Label>
               <Input
                 id="email"
                 type="email"
                 value={user?.email || ''}
                 disabled
-                className="bg-gray-100"
+                className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400"
               />
-              <p className="text-sm text-gray-500">Email cannot be changed</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500">Email cannot be changed</p>
             </div>
 
             <Button 
               type="submit" 
               disabled={profileLoading || name.trim() === user?.name}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white"
             >
               {profileLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -224,20 +211,20 @@ export function SettingsPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
             <Lock className="h-5 w-5" />
             Change Password
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-gray-600 dark:text-gray-400">
             Update your password to keep your account secure
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handlePasswordChange} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="currentPassword">Current Password</Label>
+              <Label htmlFor="currentPassword" className="text-gray-700 dark:text-gray-300">Current Password</Label>
               <div className="relative">
                 <Input
                   id="currentPassword"
@@ -246,6 +233,7 @@ export function SettingsPage() {
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter current password"
                   required
+                  className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white pr-10"
                 />
                 <Button
                   type="button"
@@ -255,16 +243,16 @@ export function SettingsPage() {
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 >
                   {showCurrentPassword ? (
-                    <EyeOff className="h-4 w-4 text-gray-500" />
+                    <EyeOff className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   ) : (
-                    <Eye className="h-4 w-4 text-gray-500" />
+                    <Eye className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   )}
                 </Button>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="newPassword">New Password</Label>
+              <Label htmlFor="newPassword" className="text-gray-700 dark:text-gray-300">New Password</Label>
               <div className="relative">
                 <Input
                   id="newPassword"
@@ -274,6 +262,7 @@ export function SettingsPage() {
                   placeholder="Enter new password (min. 6 characters)"
                   minLength={6}
                   required
+                  className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white pr-10"
                 />
                 <Button
                   type="button"
@@ -283,16 +272,16 @@ export function SettingsPage() {
                   onClick={() => setShowNewPassword(!showNewPassword)}
                 >
                   {showNewPassword ? (
-                    <EyeOff className="h-4 w-4 text-gray-500" />
+                    <EyeOff className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   ) : (
-                    <Eye className="h-4 w-4 text-gray-500" />
+                    <Eye className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   )}
                 </Button>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Label htmlFor="confirmPassword" className="text-gray-700 dark:text-gray-300">Confirm New Password</Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
@@ -301,6 +290,7 @@ export function SettingsPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm new password"
                   required
+                  className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white pr-10"
                 />
                 <Button
                   type="button"
@@ -310,9 +300,9 @@ export function SettingsPage() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4 text-gray-500" />
+                    <EyeOff className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   ) : (
-                    <Eye className="h-4 w-4 text-gray-500" />
+                    <Eye className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   )}
                 </Button>
               </div>
@@ -321,7 +311,7 @@ export function SettingsPage() {
             <Button 
               type="submit" 
               disabled={passwordLoading || !currentPassword || !newPassword || !confirmPassword}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white"
             >
               {passwordLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -334,32 +324,32 @@ export function SettingsPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-white dark:bg-black border-gray-200 dark:border-gray-800">
         <CardHeader>
-          <CardTitle>Account Information</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-gray-900 dark:text-white">Account Information</CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-400">
             Your account details and membership
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Account Type:</span>
-              <span className="font-medium capitalize">{user?.role}</span>
+              <span className="text-gray-600 dark:text-gray-400">Account Type:</span>
+              <span className="font-medium capitalize text-gray-900 dark:text-white">{user?.role}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Member Since:</span>
-              <span className="font-medium">{memberSince || 'Loading...'}</span>
+              <span className="text-gray-600 dark:text-gray-400">Member Since:</span>
+              <span className="font-medium text-gray-900 dark:text-white">{memberSince || 'Loading...'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Status:</span>
-              <Badge variant="outline" className="bg-green-100 text-green-800">
+              <span className="text-gray-600 dark:text-gray-400">Status:</span>
+              <Badge variant="outline" className="bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300 dark:border-pink-800">
                 Active
               </Badge>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">User ID:</span>
-              <span className="font-mono text-xs">{user?.id}</span>
+              <span className="text-gray-600 dark:text-gray-400">User ID:</span>
+              <span className="font-mono text-xs text-gray-900 dark:text-white">{user?.id}</span>
             </div>
           </div>
         </CardContent>

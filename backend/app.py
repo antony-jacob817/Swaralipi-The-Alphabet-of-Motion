@@ -1,22 +1,41 @@
 # src/app.py
+import os
+import traceback
+import json
+import base64
+import time
+import threading # <-- Added for our MediaPipe lock!
+from datetime import datetime, timedelta
+from io import BytesIO
+from collections import defaultdict
+from functools import wraps
+
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from pymongo import MongoClient
 import bcrypt
-import os, traceback
 from dotenv import load_dotenv
 from bson import ObjectId
-import json
-from datetime import datetime, timedelta  # Fixed import
-from werkzeug.utils import secure_filename
-from collections import defaultdict
-from functools import wraps
 import gridfs
-from bson import ObjectId
 from werkzeug.utils import secure_filename
-import os
 import PyPDF2
-from io import BytesIO
+from PIL import Image
+
+import numpy as np
+import cv2
+import mediapipe as mp
+import tensorflow as tf
+from keras.src.ops.numpy import Any as KerasAny # <-- Critical for loading your model
+import google.generativeai as genai
+
+from services.cognition import get_answer
+from services.gloss import to_gloss
+
+# --- NEW: Custom wrapper from your infer_webcam.py script ---
+class SafeAny(KerasAny):
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('name', None)
+        super().__init__(*args, **kwargs)
 
 load_dotenv()
 
@@ -31,6 +50,31 @@ CORS(app,
 
 # MongoDB Configuration
 MONGO_URI = os.getenv('MONGO_URI')
+
+try:
+    # Adjust path if your app.py is inside /src and models are in /backend/models
+    MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'backend', 'models', 'final.keras')
+    LABELS_PATH = os.path.join(os.path.dirname(__file__), '..', 'backend', 'models', 'labels.json')
+    
+    # --- FIXED: Added the custom_objects wrapper ---
+    sign_model = tf.keras.models.load_model(
+        MODEL_PATH,
+        custom_objects={"Any": SafeAny}
+    )
+    
+    with open(LABELS_PATH, 'r') as f:
+        sign_labels = json.load(f)
+        # Convert list to dict if labels.json is an array: ["HELLO", "BOOK"] -> {0: "HELLO", 1: "BOOK"}
+        if isinstance(sign_labels, list):
+            sign_labels = {i: label for i, label in enumerate(sign_labels)}
+            
+    print("✅ Sign Language model loaded successfully!")
+except Exception as e:
+    print(f"⚠️ Warning: Could not load sign model. Error: {e}")
+    # This will print the exact reason if it fails to load
+    traceback.print_exc() 
+    sign_model = None
+    sign_labels = {}
 
 if not MONGO_URI:
     print("❌ ERROR: MONGO_URI not found in .env file")
@@ -1438,6 +1482,170 @@ def get_parent_student_progress(parent_id):
         print(f"❌ Error in get_parent_student_progress: {str(e)}")
         return jsonify({'message': 'Failed to fetch student progress data'}), 500
     
+ml_lock = threading.Lock()
+
+# 1. Initialize exactly like your script
+mp_hands = mp.solutions.hands
+hands = mp_hands.Hands(
+    static_image_mode=False, 
+    max_num_hands=2,
+    min_detection_confidence=0.5, 
+    min_tracking_confidence=0.5
+)
+
+# NEW: Create a thread lock for MediaPipe
+hands_lock = threading.Lock() 
+
+def frame_to_vec_exact(frame):
+    # This is a direct copy of your working script's logic
+    img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    
+    # NEW: Lock the thread so only one frame processes at a time
+    with hands_lock:
+        res = hands.process(img)
+        
+    if not res.multi_hand_landmarks:
+        return np.zeros(126, dtype=np.float32)
+    
+    hands_map = {}
+    for i, lm in enumerate(res.multi_hand_landmarks):
+        label = res.multi_handedness[i].classification[0].label.lower()
+        a = []
+        for p in lm.landmark:
+            a.extend([p.x, p.y, p.z])
+        hands_map[label] = np.array(a, dtype=np.float32)
+    
+    left = hands_map.get('left', np.zeros(63, dtype=np.float32))
+    right = hands_map.get('right', np.zeros(63, dtype=np.float32))
+    return np.concatenate([left, right], axis=0)
+
+@app.route('/api/predict-sign', methods=['POST'])
+def predict_sign():
+    # 1. If the server is already processing a frame, immediately reject the new request
+    # This prevents the queue from backing up and Keras from crashing.
+    if not ml_lock.acquire(blocking=False):
+        print("Server busy, dropping frame tick...")
+        return jsonify({"word": None}), 200
+        
+    try:
+        data = request.get_json()
+        frames_list = data.get('frames', [])
+        
+        if not frames_list:
+            return jsonify({"word": None}), 200
+
+        vectors = []
+        for i, f_b64 in enumerate(frames_list):
+            try:
+                if ',' in f_b64:
+                    f_b64 = f_b64.split(',')[1]
+                img_bytes = base64.b64decode(f_b64)
+                np_arr = np.frombuffer(img_bytes, np.uint8)
+                frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+                if frame is None:
+                    continue
+                
+                # Extract features
+                vec = frame_to_vec_exact(frame)
+                vectors.append(vec)
+            except Exception as e:
+                continue
+
+        if len(vectors) == 0:
+            return jsonify({"word": None}), 200
+
+        # Pad if needed
+        if len(vectors) < 30:
+            padding = [np.zeros(126)] * (30 - len(vectors))
+            vectors = padding + vectors[-30:]
+        else:
+            vectors = vectors[-30:]
+
+        arr = np.stack(vectors)[None, ...]
+        
+        # Predict using Keras (now safely isolated)
+        probs = sign_model.predict(arr, verbose=0)[0]
+
+        # Get Top 5 Predictions
+        top_indices = np.argsort(probs)[-5:][::-1] 
+        
+        predictions = []
+        for idx in top_indices:
+            predictions.append({
+                "word": sign_labels[int(idx)],
+                "confidence": float(probs[int(idx)])
+            })
+
+        return jsonify({
+            "predictions": predictions,
+            "word": predictions[0]["word"], 
+            "confidence": predictions[0]["confidence"]
+        })
+
+    except Exception as e:
+        print("!!! FATAL ERROR IN /api/predict-sign !!!")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+        
+    finally:
+        # 2. ALWAYS release the lock when done, even if an error occurred!
+        ml_lock.release()
+    
+def predict_from_landmarks(landmarks):
+    input_data = np.array(landmarks).reshape(1, 30, 126)
+    
+    with ml_lock:
+        prediction = sign_model.predict(input_data, verbose=0)
+        
+    index = int(np.argmax(prediction))
+    
+    return sign_labels[index]
+
+@app.route("/api/predict", methods=["POST"])
+def predict():
+    data = request.json
+    landmarks = data.get("landmarks")
+
+    if not landmarks:
+        return jsonify({"error": "No landmarks"}), 400
+
+    word = predict_from_landmarks(landmarks)
+
+    return jsonify({"word": word})
+       
+@app.route("/api/doubt", methods=["POST"])
+def handle_doubt():
+    data = request.json
+    sign_text = data.get("text", "")
+
+    # Step 1: AI understanding + answer
+    result = get_answer(sign_text)
+
+    # Parse response
+    lines = result.split("\n")
+    question = ""
+    answer = ""
+
+    for line in lines:
+        if "QUESTION:" in line:
+            question = line.replace("QUESTION:", "").strip()
+        if "ANSWER:" in line:
+            answer = line.replace("ANSWER:", "").strip()
+
+    # Step 2: Convert to gloss (YOUR logic)
+    gloss = to_gloss(answer)
+
+    return jsonify({
+        "question": question,
+        "answer": answer,
+        "gloss": gloss
+    })
+
+def clean_tokens(tokens):
+    # remove duplicates, smooth noise
+    return " ".join(tokens)
+
 if __name__ == '__main__':
     print("\n" + "="*50)
     print("🚀 Flask Server Starting...")
