@@ -8,7 +8,7 @@ STOPWORDS = set([
 "they","him","her","them","himself","herself","itself","themselves",
 "that","which","who","whom","whose","what","when","where","how","why",
 "whether","whichever","whoever","some","any","many","few","several",
-"each","every","all","most","none","enough","little","please","thank",
+"each","every","most","none","enough","little","please","thank",
 "sorry","excuse","okay","well","actually","just","really","very",
 "also","again","already","even","still","only","too","maybe"
 ])

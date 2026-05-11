@@ -478,7 +478,7 @@ export function TeachingMode() {
                     </Button>
                   </div>
                   <p className="text-sm text-green-600 dark:text-green-400 mb-1"><strong>Q:</strong> {doubtQuestion}</p>
-                  <p className="text-sm text-green-800 dark:text-green-300 mb-3"><strong>A:</strong> {doubtNormalText}</p>
+                  <p className="text-sm text-green-800 dark:text-green-300 mb-3 font-bold uppercase tracking-wide"><strong>A:</strong> {doubtGlossWords.join(' ')}</p>
                   <div className="bg-white dark:bg-black p-3 rounded border border-green-100 dark:border-green-800">
                     <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Current Sign (Gloss):</p>
                     <p className="text-xl font-bold text-green-700 dark:text-green-400">{currentWord}</p>

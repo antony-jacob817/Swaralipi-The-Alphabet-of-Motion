@@ -3,11 +3,9 @@ import os
 import traceback
 import json
 import base64
-import time
 import threading # <-- Added for our MediaPipe lock!
 from datetime import datetime, timedelta
 from io import BytesIO
-from collections import defaultdict
 from functools import wraps
 
 from flask import Flask, request, jsonify, send_file
@@ -19,13 +17,12 @@ from bson import ObjectId
 import gridfs
 from werkzeug.utils import secure_filename
 import PyPDF2
-from PIL import Image
 
 import numpy as np
 import cv2
 import mediapipe as mp
 import tensorflow as tf
-from keras.src.ops.numpy import Any as KerasAny # <-- Critical for loading your model
+from keras.src.ops.numpy import Any as KerasAny
 import google.generativeai as genai
 
 from services.cognition import get_answer
