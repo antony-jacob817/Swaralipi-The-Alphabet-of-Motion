@@ -1644,6 +1644,8 @@ def clean_tokens(tokens):
     return " ".join(tokens)
 
 if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 7860)) # Default to 7860 for Hugging Face
+    app.run(host='0.0.0.0', port=port)
     print("\n" + "="*50)
     print("🚀 Flask Server Starting...")
     print("📍 http://localhost:5000")
