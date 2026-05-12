@@ -96,7 +96,7 @@ source venv/bin/activate
 4. Install dependencies:
 
 ```bash
-pip install -r requirements_main.txt
+pip install -r requirements.txt
 ```
 
 5. Create a `.env` file inside the backend folder:
