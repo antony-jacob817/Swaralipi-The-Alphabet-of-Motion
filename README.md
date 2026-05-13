@@ -20,8 +20,9 @@ This project was developed with passion and dedication by:
 
 ### 🧠 Intelligent Cognition
 
-* **ISL to English Translation:** Converts choppy ISL gloss into grammatically correct English questions using the **Gemini 2.5 Flash API**.
-* **Automated Answering:** Provides short, simple, and educational answers to student queries in real-time.
+* **Hybrid AI Architecture:** Originally designed using the **Qwen** LLM for completely private, offline processing. For our live cloud deployment, we utilize the **Gemini 2.5 Flash API** to bypass the heavy RAM/GPU requirements of cloud hosting platforms.
+* **ISL to English Translation:** Converts choppy ISL gloss into grammatically correct English questions in real-time.
+* **Automated Answering:** Provides short, simple, and educational answers to student queries.
 * **Gloss Conversion:** Translates English responses back into sign language gloss for the avatar to perform.
 
 ### 🎭 Interactive 2D Avatar
@@ -52,7 +53,7 @@ This project was developed with passion and dedication by:
 * Flask (Python Web Framework)
 * TensorFlow / Keras (Sign Recognition)
 * MongoDB Atlas (Cloud Database)
-* Gemini 2.5 Flash API / Qwen (LLM Integration)
+* **LLM Integration:** Gemini 2.5 Flash API (Cloud Deployment) / Qwen (Local Execution)
 
 ---
 
@@ -248,9 +249,9 @@ npm run dev
 
 # 🧠 Running Swaralipi Locally with Qwen
 
-For our live production deployment on Render, we utilize the Gemini API because cloud-hosting a Large Language Model requires expensive GPU infrastructure.
+For our live production deployment on Hugging Face Spaces, we utilize the Gemini 2.5 Flash API. This is because hosting a Large Language Model natively requires expensive GPU infrastructure and exceeds the 16GB RAM limits of free cloud hosting tiers.
 
-However, Swaralipi was originally designed and tested using the **Qwen** model. If you are developing locally and want a completely free, offline, and private AI pipeline, you can easily swap out the Gemini API for a local Qwen instance.
+However, Swaralipi was originally designed and tested using the **Qwen** model. If you are developing locally and want a completely free, offline, and private AI pipeline (avoiding API limits and cloud dependencies), you can easily swap out the Gemini API for a local Qwen instance.
 
 ---
 
