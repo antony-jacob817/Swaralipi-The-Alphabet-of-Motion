@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Holistic, Results } from '@mediapipe/holistic';
+import type { Results } from '@mediapipe/holistic';
 
 interface SignAvatar2DProps {
   word: string;                
@@ -192,9 +192,28 @@ export const SignAvatar2D: React.FC<SignAvatar2DProps> = ({ word, onSignComplete
       ctx.stroke();
     };
 
-    const holistic = new Holistic({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`,
-    });
+    type HolisticInstance = {
+      setOptions: (options: {
+        modelComplexity: number;
+        smoothLandmarks: boolean;
+        minDetectionConfidence: number;
+        minTrackingConfidence: number;
+      }) => void;
+      onResults: (callback: (results: Results) => void) => void;
+      send: (input: { image: HTMLVideoElement }) => Promise<void>;
+      close: () => void;
+    };
+
+    // Force React to use the global script from index.html, completely bypassing Vite's bundler
+    interface HolisticConstructor {
+      new (options: { locateFile: (file: string) => string }): HolisticInstance;
+    }
+
+    const GlobalHolistic = (window as unknown as { Holistic: HolisticConstructor }).Holistic;
+    
+    const holistic = new GlobalHolistic({
+      locateFile: (file: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`,
+    }) as HolisticInstance;
 
     holistic.setOptions({
       modelComplexity: 0,
