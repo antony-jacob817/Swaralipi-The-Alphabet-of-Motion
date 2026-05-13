@@ -1,6 +1,7 @@
 # Swaralipi: The Alphabet of Motion 🤟
 
 **Swaralipi** is an AI-powered educational platform designed to bridge the communication gap between the hearing-impaired community and the world. By leveraging advanced Machine Learning and Computer Vision, the platform translates Indian Sign Language (ISL) gloss into natural English and provides an interactive 2D avatar for immersive learning.
+
 <img width="1845" height="815" alt="Screenshot 2026-05-12 094019" src="https://github.com/user-attachments/assets/5e99d3b9-c0e9-46f0-82d5-2b5248376a55" />
 
 ---
