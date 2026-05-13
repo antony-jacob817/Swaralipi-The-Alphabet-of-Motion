@@ -19,6 +19,11 @@ backend/venv/
 backend/__pycache__/
 .bolt/
 
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
