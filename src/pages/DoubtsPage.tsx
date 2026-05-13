@@ -33,9 +33,9 @@ export function DoubtsPage({ mode = 'admin' }: DoubtsPageProps) {
       try {
         setLoading(true);
         
-        let url = 'http://localhost:5000/api/doubts';
+        let url = 'https://antonyjacob817-swaralipi-api.hf.space/api/doubts';
         if (mode === 'parent' && user?.id) {
-          url = `http://localhost:5000/api/parent/doubts/${user.id}`;
+          url = `https://antonyjacob817-swaralipi-api.hf.space/api/parent/doubts/${user.id}`;
         }
         
         const response = await fetch(url);
@@ -62,7 +62,7 @@ export function DoubtsPage({ mode = 'admin' }: DoubtsPageProps) {
       // Only admins can update doubt status
       if (mode !== 'admin') return;
       
-      const response = await fetch(`http://localhost:5000/api/doubts/${doubtId}`, {
+      const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/doubts/${doubtId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

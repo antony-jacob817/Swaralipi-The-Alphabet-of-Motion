@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://antonyjacob817-swaralipi-api.hf.space';
 
 export const apiRequest = async (method: string, url: string, body?: unknown) => {
   const token = localStorage.getItem('token');

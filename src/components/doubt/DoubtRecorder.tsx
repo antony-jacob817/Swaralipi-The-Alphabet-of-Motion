@@ -42,7 +42,7 @@ export function DoubtRecorder({ onDoubtSubmitted, onClose }: DoubtRecorderProps)
     const framesToSend = [...framesRef.current];
 
     try {
-      const response = await fetch('http://localhost:5000/api/predict-sign', {
+      const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/predict-sign', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ frames: framesToSend }),

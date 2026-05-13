@@ -25,7 +25,7 @@ export function ManageUsersPage() {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/admin/users');
+        const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/admin/users');
         
         if (!response.ok) {
           throw new Error('Failed to fetch users');

@@ -31,7 +31,7 @@ export function PDFLibrary() {
     const fetchPDFs = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/pdfs');
+        const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/pdfs');
         
         if (!response.ok) {
           throw new Error('Failed to fetch PDFs');
@@ -77,7 +77,7 @@ export function PDFLibrary() {
 
   const handleDownload = async (doc: PDFDocument) => {
     try {
-      const response = await fetch(`http://localhost:5000${doc.downloadUrl}`);
+      const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space${doc.downloadUrl}`);
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);

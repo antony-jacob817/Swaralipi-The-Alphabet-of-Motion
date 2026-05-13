@@ -61,7 +61,7 @@ export function TeachingMode() {
     const fetchSubjects = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/subjects');
+        const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/subjects');
         if (!response.ok) throw new Error('Failed to fetch subjects');
         const data = await response.json();
         setSubjects(data);
@@ -83,7 +83,7 @@ export function TeachingMode() {
     
     try {
       setContentLoading(true);
-      const response = await fetch(`http://localhost:5000/api/pdf-text/${selectedChapterData.pdfId}`);
+      const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/pdf-text/${selectedChapterData.pdfId}`);
       const data = await response.json();
       
       if (response.ok && data.success && data.text) {
@@ -111,7 +111,7 @@ export function TeachingMode() {
 
   useEffect(() => {
     if (selectedChapterData && selectedChapterData.pdfId) {
-      setPdfUrl(`http://localhost:5000/api/pdf/${selectedChapterData.pdfId}`);
+      setPdfUrl(`https://antonyjacob817-swaralipi-api.hf.space/api/pdf/${selectedChapterData.pdfId}`);
       fetchPdfTextForSigning();
     } else {
       setPdfUrl('');
@@ -226,7 +226,7 @@ export function TeachingMode() {
   setIsFetchingDoubt(true);
 
   try {
-    const response = await fetch('http://localhost:5000/api/doubt', {
+    const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/doubt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: doubtText })
@@ -269,13 +269,13 @@ export function TeachingMode() {
   // PDF Actions
   const handleViewPDF = () => {
     if (selectedChapterData) {
-      window.open(`http://localhost:5000/api/pdf/${selectedChapterData.pdfId}`, '_blank');
+      window.open(`https://antonyjacob817-swaralipi-api.hf.space/api/pdf/${selectedChapterData.pdfId}`, '_blank');
     }
   };
 
   const handleDownloadPDF = () => {
     if (selectedChapterData) {
-      const downloadUrl = `http://localhost:5000/api/pdf/${selectedChapterData.pdfId}`;
+      const downloadUrl = `https://antonyjacob817-swaralipi-api.hf.space/api/pdf/${selectedChapterData.pdfId}`;
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = `${selectedChapterData.name}.pdf`;

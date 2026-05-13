@@ -40,7 +40,7 @@ app = Flask(__name__)
 
 # Configure CORS properly
 CORS(app, 
-     origins=["http://localhost:5173", "http://localhost:3000", "http://localhost:5000"],
+     origins=["http://localhost:5173", "http://localhost:3000", "https://antonyjacob817-swaralipi-api.hf.space", "http://localhost:5000"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization", "Accept"],
      supports_credentials=True)
@@ -1648,7 +1648,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port)
     print("\n" + "="*50)
     print("🚀 Flask Server Starting...")
-    print("📍 http://localhost:5000")
+    print("📍 https://antonyjacob817-swaralipi-api.hf.space")
     print("📊 Database:", "Swaralipi")
     print("🗃️ Collections:", db.list_collection_names())
     print("="*50 + "\n")

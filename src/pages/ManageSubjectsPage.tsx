@@ -40,7 +40,7 @@ export function ManageSubjectsPage() {
 
   const fetchSubjects = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/subjects');
+      const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/subjects');
       if (response.ok) {
         const data = await response.json();
         setSubjects(data);
@@ -91,7 +91,7 @@ export function ManageSubjectsPage() {
     try {
       if (mode === 'edit-subject') {
         // Edit subject name
-        const response = await fetch(`http://localhost:5000/api/subjects/${editingSubjectId}`, {
+        const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/subjects/${editingSubjectId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ export function ManageSubjectsPage() {
           formData.append('pdf', pdfFile);
         }
 
-        const response = await fetch(`http://localhost:5000/api/subjects/${editingSubjectId}/chapters/${editingChapterIndex}`, {
+        const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/subjects/${editingSubjectId}/chapters/${editingChapterIndex}`, {
           method: 'PUT',
           body: formData,
         });
@@ -148,8 +148,8 @@ export function ManageSubjectsPage() {
         }
 
         const url = mode === 'add-subject' 
-          ? 'http://localhost:5000/api/subjects'
-          : `http://localhost:5000/api/subjects/${selectedSubject}/chapters`;
+          ? 'https://antonyjacob817-swaralipi-api.hf.space/api/subjects'
+          : `https://antonyjacob817-swaralipi-api.hf.space/api/subjects/${selectedSubject}/chapters`;
         
         const response = await fetch(url, {
           method: 'POST',
@@ -219,7 +219,7 @@ export function ManageSubjectsPage() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/subjects/${subjectId}`, {
+      const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/subjects/${subjectId}`, {
         method: 'DELETE',
       });
 

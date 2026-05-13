@@ -37,7 +37,7 @@ export function StudentDashboard() {
       
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/api/student/dashboard/${user.id}`);
+        const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/student/dashboard/${user.id}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch student data');

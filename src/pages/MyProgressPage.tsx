@@ -51,7 +51,7 @@ export function MyProgressPage() {
       
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/api/student/progress/${user.id}`);
+        const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/student/progress/${user.id}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch progress data');

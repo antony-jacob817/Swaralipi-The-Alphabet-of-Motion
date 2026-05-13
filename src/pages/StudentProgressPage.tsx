@@ -38,9 +38,9 @@ export function StudentProgressPage({ mode = 'admin' }: StudentProgressPageProps
       try {
         setLoading(true);
         
-        let url = 'http://localhost:5000/api/admin/student-progress';
+        let url = 'https://antonyjacob817-swaralipi-api.hf.space/api/admin/student-progress';
         if (mode === 'parent' && user?.id) {
-          url = `http://localhost:5000/api/parent/student-progress/${user.id}`;
+          url = `https://antonyjacob817-swaralipi-api.hf.space/api/parent/student-progress/${user.id}`;
         }
         
         const response = await fetch(url);

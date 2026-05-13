@@ -26,7 +26,7 @@ export function SettingsPage() {
     const fetchUserDetails = async () => {
       if (user?.id) {
         try {
-          const response = await fetch(`http://localhost:5000/api/user/${user.id}`);
+          const response = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/user/${user.id}`);
           const userData = await response.json();
           
           if (response.ok && userData.createdAt) {
@@ -64,7 +64,7 @@ export function SettingsPage() {
         throw new Error('Name cannot be empty');
       }
 
-      const response = await fetch('http://localhost:5000/api/update-profile', {
+      const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/update-profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: user?.id, name: name.trim() }),
@@ -106,7 +106,7 @@ export function SettingsPage() {
         throw new Error('New passwords do not match');
       }
 
-      const response = await fetch('http://localhost:5000/api/change-password', {
+      const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/change-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user?.id, currentPassword, newPassword }),

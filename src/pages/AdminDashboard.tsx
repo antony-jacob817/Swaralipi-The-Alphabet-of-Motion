@@ -22,7 +22,7 @@ export function AdminDashboard() {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/admin/dashboard');
+        const response = await fetch('https://antonyjacob817-swaralipi-api.hf.space/api/admin/dashboard');
         
         if (!response.ok) {
           throw new Error('Failed to fetch dashboard data');

@@ -47,7 +47,7 @@ export function ParentDashboard() {
         setLoading(true);
         
         // Fetch student data
-        const studentResponse = await fetch(`http://localhost:5000/api/parent/student/${user?.id}`);
+        const studentResponse = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/parent/student/${user?.id}`);
         if (!studentResponse.ok) {
           throw new Error('Failed to fetch student data');
         }
@@ -55,7 +55,7 @@ export function ParentDashboard() {
         setStudentData(studentData);
         
         // Fetch doubts count
-        const doubtsResponse = await fetch(`http://localhost:5000/api/parent/doubts/${user?.id}`);
+        const doubtsResponse = await fetch(`https://antonyjacob817-swaralipi-api.hf.space/api/parent/doubts/${user?.id}`);
         if (doubtsResponse.ok) {
           const doubtsData: Doubt[] = await doubtsResponse.json();
           const pending = doubtsData.filter(doubt => doubt.status === 'pending').length;
