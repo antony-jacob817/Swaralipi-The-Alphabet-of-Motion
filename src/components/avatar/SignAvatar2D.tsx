@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Holistic, type Results } from '@mediapipe/holistic';
+import type { Results } from '@mediapipe/holistic';
 
 interface SignAvatar2DProps {
   word: string;                
@@ -192,8 +192,30 @@ export const SignAvatar2D: React.FC<SignAvatar2DProps> = ({ word, onSignComplete
       ctx.stroke();
     };
 
-    const holistic = new Holistic({
-      locateFile: (file) =>
+    type HolisticOptions = {
+      modelComplexity?: number;
+      smoothLandmarks?: boolean;
+      minDetectionConfidence?: number;
+      minTrackingConfidence?: number;
+    };
+
+    type HolisticInstance = {
+      setOptions: (options: HolisticOptions) => void;
+      onResults: (callback: (results: Results) => void) => void;
+      send: (input: { image: HTMLVideoElement }) => Promise<void>;
+      close: () => void;
+    };
+
+    // Extend Window interface at the top of the file to avoid ambient module declaration error
+    const holisticConstructor = (window as unknown as { Holistic: new (config: { locateFile: (file: string) => string }) => HolisticInstance }).Holistic;
+
+    if (!holisticConstructor) {
+      console.error("MediaPipe Holistic failed to load");
+      return;
+    }
+
+    const holistic: HolisticInstance = new holisticConstructor({
+      locateFile: (file: string) =>
         `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`,
     });
 
