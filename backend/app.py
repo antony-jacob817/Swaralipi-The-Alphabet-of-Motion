@@ -544,7 +544,7 @@ def download_pdf(pdf_id):
         
         # Add headers to allow iframe embedding
         response.headers['X-Frame-Options'] = 'ALLOWALL'
-        response.headers['Content-Security-Policy'] = "frame-ancestors 'self' http://localhost:5173 http://localhost:3000"
+        response.headers['Content-Security-Policy'] = "frame-ancestors 'self' http://localhost:5173 http://localhost:3000 https://swaralipi-the-alphabet-of-motion.vercel.app"
         
         return response
     except Exception as e:
