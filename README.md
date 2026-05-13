@@ -285,7 +285,7 @@ To use Qwen locally:
 1. Navigate to:
 
 ```bash
-backend/services/
+backend
 ```
 
 2. Open `app.py`
