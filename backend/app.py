@@ -54,9 +54,9 @@ CORS(app,
 MONGO_URI = os.getenv('MONGO_URI')
 
 try:
-    # Adjust path if your app.py is inside /src and models are in /backend/models
-    MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'backend', 'models', 'final.keras')
-    LABELS_PATH = os.path.join(os.path.dirname(__file__), '..', 'backend', 'models', 'labels.json')
+    # Look for the 'models' folder directly next to app.py
+    MODEL_PATH = os.path.join(os.path.dirname(__file__), 'models', 'final.keras')
+    LABELS_PATH = os.path.join(os.path.dirname(__file__), 'models', 'labels.json')
     
     # --- FIXED: Added the custom_objects wrapper ---
     sign_model = tf.keras.models.load_model(
