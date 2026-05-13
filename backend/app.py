@@ -40,7 +40,12 @@ app = Flask(__name__)
 
 # Configure CORS properly
 CORS(app, 
-     origins=["http://localhost:5173", "http://localhost:3000", "https://antonyjacob817-swaralipi-api.hf.space", "http://localhost:5000"],
+     origins=[
+         "http://localhost:5173", 
+         "http://localhost:3000", 
+         "https://antonyjacob817-swaralipi-api.hf.space", 
+         "https://swaralipi-the-alphabet-of-motion.vercel.app" # <-- Added this!
+     ],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization", "Accept"],
      supports_credentials=True)
