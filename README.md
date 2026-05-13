@@ -330,7 +330,7 @@ Hosted on:
 
 Hosted on:
 
-* `https://render.com`
+* `https://huggingface.co/`
 
 ## Database
 
